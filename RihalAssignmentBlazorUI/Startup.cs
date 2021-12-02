@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -28,6 +29,15 @@ namespace RihalAssignmentBlazorUI
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
+
+            services.AddDbContext<AppDbContext>(options =>
+            {
+                options.UseSqlite("Data Source = Products.db");
+            });
+
+            services.AddScoped<ClassesServices>();
+            services.AddScoped<CountriesServices>();
+            services.AddScoped<StudentsServices>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

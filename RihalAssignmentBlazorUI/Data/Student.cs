@@ -10,7 +10,7 @@ namespace RihalAssignmentBlazorUI.Data
         public int Id { get; set; }
         public int Class_Id { get; set; }
         public int Country_Id { get; set; }
-        public string Student_Name { get; set; }
+        public string Name { get; set; }
         public DateTime Date_Of_Birth { get; set; }
     }
 }

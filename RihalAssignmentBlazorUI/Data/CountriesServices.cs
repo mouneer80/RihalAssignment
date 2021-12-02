@@ -9,11 +9,11 @@ namespace RihalAssignmentBlazorUI.Data
     public class CountriesServices
     {
         #region Private members
-        private CountryDbContext dbContext;
+        private AppDbContext dbContext;
         #endregion
 
         #region Constructor
-        public CountriesServices(CountryDbContext dbContext)
+        public CountriesServices(AppDbContext dbContext)
         {
             this.dbContext = dbContext;
         }

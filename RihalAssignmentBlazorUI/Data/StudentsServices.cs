@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace RihalAssignmentBlazorUI.Data
 {
-    public class ClassesServices
+    public class StudentsServices
     {
         #region Private members
         private AppDbContext dbContext;
         #endregion
 
         #region Constructor
-        public ClassesServices(AppDbContext dbContext)
+        public StudentsServices(AppDbContext dbContext)
         {
             this.dbContext = dbContext;
         }
@@ -21,46 +21,46 @@ namespace RihalAssignmentBlazorUI.Data
 
         #region Public methods
         /// <summary>
-        /// This method returns the list of classes
+        /// This method returns the list of Students
         /// </summary>
         /// <returns></returns>
-        public async Task<List<ClassOfDomain>> GetClassAsync()
+        public async Task<List<Student>> GetStudentAsync()
         {
-            return await dbContext.Class.ToListAsync();
+            return await dbContext.Student.ToListAsync();
         }
 
         /// <summary>
-        /// This method add a new Class to the DbContext and saves it
+        /// This method add a new Student to the DbContext and saves it
         /// </summary>
-        /// <param name="class"></param>
+        /// <param name="student"></param>
         /// <returns></returns>
-        public async Task<ClassOfDomain> AddClassAsync(ClassOfDomain Class)
+        public async Task<Student> AddStudentAsync(Student Student)
         {
             try
             {
-                dbContext.Class.Add(Class);
+                dbContext.Student.Add(Student);
                 await dbContext.SaveChangesAsync();
             }
             catch (Exception)
             {
                 throw;
             }
-            return Class;
+            return Student;
         }
 
         /// <summary>
-        /// This method update and existing Class and saves the changes
+        /// This method update and existing Student and saves the changes
         /// </summary>
-        /// <param name="class"></param>
+        /// <param name="student"></param>
         /// <returns></returns>
-        public async Task<ClassOfDomain> UpdateClassAsync(ClassOfDomain Class)
+        public async Task<Student> UpdateStudentAsync(Student Student)
         {
             try
             {
-                var ClassExist = dbContext.Class.FirstOrDefault(p => p.Id == Class.Id);
-                if (ClassExist != null)
+                var studentExist = dbContext.Student.FirstOrDefault(p => p.Id == Student.Id);
+                if (studentExist != null)
                 {
-                    dbContext.Update(Class);
+                    dbContext.Update(Student);
                     await dbContext.SaveChangesAsync();
                 }
             }
@@ -68,19 +68,19 @@ namespace RihalAssignmentBlazorUI.Data
             {
                 throw;
             }
-            return Class;
+            return Student;
         }
 
         /// <summary>
-        /// This method removes and existing Class from the DbContext and saves it
+        /// This method removes and existing Student from the DbContext and saves it
         /// </summary>
-        /// <param name="class"></param>
+        /// <param name="student"></param>
         /// <returns></returns>
-        public async Task DeleteClassAsync(ClassOfDomain Class)
+        public async Task DeleteStudentAsync(Student Student)
         {
             try
             {
-                dbContext.Class.Remove(Class);
+                dbContext.Student.Remove(Student);
                 await dbContext.SaveChangesAsync();
             }
             catch (Exception)
