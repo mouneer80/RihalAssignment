@@ -11,6 +11,7 @@ using RihalAssignment.Api.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace RihalAssignment.Api
@@ -36,6 +37,7 @@ namespace RihalAssignment.Api
             services.AddScoped<ICountryRepository, CountryRepository>();
             services.AddScoped<IStudentRepository, StudentRepository>();
             services.AddControllers();
+            //services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,0 +1,128 @@
+﻿@page "/studentsList"
+
+@using RihalAssignment.Models
+@inject RihalAssignmentBlazorUI.Web.Services.IStudentService _studentService
+@inject RihalAssignmentBlazorUI.Web.Services.IClassService _classService
+@inject RihalAssignmentBlazorUI.Web.Services.ICountryService _countryService
+@inject MudBlazor.ISnackbar snackBar
+
+
+<MudCard Elevation="25">
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudText Typo="Typo.h6">Add / Edit Students</MudText>
+        </CardHeaderContent>
+    </MudCardHeader>
+    <MudCardContent>
+        <MudTextField @bind-Value="student.Name" Label="Student Name" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+
+        <MudSelect @bind-Value="student.ClassId" Label="Classes" Variant="Variant.Outlined" OffsetY="true">
+            @foreach (var _class in classes)
+            {
+                <MudSelectItem Value="_class.Id">@_class.Name</MudSelectItem>
+            }
+        </MudSelect>
+        <MudSelect @bind-Value="student.CountryId" Label="Countries" Variant="Variant.Outlined" OffsetY="true">
+            @foreach (var _country in countries)
+            {
+                <MudSelectItem Value="_country.Id">@_country.Name</MudSelectItem>
+            }
+        </MudSelect>
+
+        @*<MudTextField @bind-Value="student.Classes.Name" Label="Age" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+        <MudTextField @bind-Value="student.Countries.Name" Label="Address" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>*@
+        <MudTextField @bind-Value="student.DateOfBirth" Label="Contact Number" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+        <br />
+        <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="Save">Save Student</MudButton>
+    </MudCardContent>
+</MudCard>
+<br />
+<MudTable Elevation="25" Items="students" Filter="new Func<Student, bool>(Search)" @bind-customer="student">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Students</MudText>
+        <MudToolBarSpacer />
+        <MudTextField @bind-Value="searchString" Placeholder="Search for Students..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>Id</MudTh>
+        <MudTh>Student Name</MudTh>
+        <MudTh>Age</MudTh>
+        <MudTh>Address</MudTh>
+        <MudTh>ContactNo</MudTh>
+        <MudTh>Actions</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Id">@context.Id</MudTd>
+        <MudTd DataLabel="Student Name">@context.Name</MudTd>
+        <MudTd DataLabel="Age">@context.DateOfBirth</MudTd>
+        <MudTd DataLabel="Address">@context.Classes.Name</MudTd>
+        <MudTd DataLabel="ContactNo">@context.Countries.Name</MudTd>
+        <MudTd DataLabel="">
+            <MudFab @onclick="@(()=>Edit(@context.Id))" Color="Color.Primary" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small" />
+            <MudFab @onclick="@(()=>Delete(@context.Id))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" />
+        </MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager PageSizeOptions="new int[] { 5,10,20,50}" />
+    </PagerContent>
+</MudTable>
+
+@code{
+    private string searchString = "";
+
+    private Student student = new();
+    private List<Student> students = new();
+    private string classId;
+    private string countryId;
+    private List<Class> classes = new();
+    private List<Country> countries = new();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetAllClasses();
+        await GetAllCountries();
+        await GetAllStudents();
+    }
+
+    private async Task<List<Student>> GetAllStudents()
+    {
+        return students = (await _studentService.GetStudents()).ToList();
+    }
+    private async Task<List<Class>> GetAllClasses()
+    {
+        return classes = (await _classService.GetClasses()).ToList();
+    }
+    private async Task<List<Country>> GetAllCountries()
+    {
+        return countries = (await _countryService.GetCountries()).ToList();
+    }
+    private bool Search(Student student)
+    {
+        if (student.Name is not null && student.ClassId != 0 && student.CountryId != 0 &&
+            student.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private async void Save()
+    {
+        _studentService.InsertStudent(student);
+        snackBar.Add("Student record saved", Severity.Success);
+        await GetAllStudents();
+    }
+    private void Edit(int id)
+    {
+        student = students.FirstOrDefault(c => c.Id == id);
+        classId = student.ClassId.ToString();
+        countryId = student.CountryId.ToString();
+    }
+    private async void Delete(int id)
+    {
+        _studentService.DeleteStudent(id);
+        snackBar.Add("Customer Data Deleted.", Severity.Success);
+        await GetAllStudents();
+    }
+}

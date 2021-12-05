@@ -9,5 +9,6 @@ namespace RihalAssignmentBlazorUI.Web.Services
     public interface ICountryService
     {
         Task<IEnumerable<Country>> GetCountries();
+        Task<Country> GetCountry(int countryId);
     }
 }

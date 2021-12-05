@@ -17,6 +17,12 @@ namespace RihalAssignmentBlazorUI.Web.Services
         {
             this.httpClient = httpClient;
         }
+
+        public async Task<Class> GetClass(int classId)
+        {
+            return await httpClient.GetFromJsonAsync<Class>($"api/classes/{classId}");
+        }
+
         public async Task<IEnumerable<Class>> GetClasses()
         {
             return await httpClient.GetFromJsonAsync<Class[]>("api/classes");

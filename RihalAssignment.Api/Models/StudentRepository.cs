@@ -23,11 +23,16 @@ namespace RihalAssignment.Api.Models
         #region Public methods
         public async Task<IEnumerable<Student>> GetStudents()
         {
-            return await appDbContext.Students.ToListAsync();
+            return await appDbContext.Students
+                .Include(e => e.Countries)
+                .Include(e => e.Classes)
+                .ToListAsync();
         }
         public async Task<Student> GetStudent(int studentId)
         {
             return await appDbContext.Students
+                .Include(e => e.Countries)
+                .Include(e => e.Classes)
                 .FirstOrDefaultAsync(s => s.Id == studentId);
         }
         public async Task<Student> AddStudent(Student Student)

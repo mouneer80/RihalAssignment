@@ -12,7 +12,7 @@ namespace RihalAssignment.Models
         [Required]
         [MinLength(4)]
         public string Name { get; set; }
-        public DateTime Date_Of_Birth { get; set; }
+        public DateTime DateOfBirth { get; set; }
         public int CountryId { get; set; }
         public Country Countries { get; set; }
         public int ClassId { get; set; }

@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.31911.196
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RihalAssignmentBlazorUI.Web", "RihalAssignmentBlazorUI.Web\RihalAssignmentBlazorUI.Web.csproj", "{8145D7CA-1778-42F5-BE7D-3DE348B77A45}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RihalAssignment.Models", "RihalAssignment.Models\RihalAssignment.Models.csproj", "{CC7879A3-8A3B-4FC2-B727-2899E8052791}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RihalAssignment.Models", "RihalAssignment.Models\RihalAssignment.Models.csproj", "{CC7879A3-8A3B-4FC2-B727-2899E8052791}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RihalAssignment.Api", "RihalAssignment.Api\RihalAssignment.Api.csproj", "{5ECD5635-9A98-44C2-87A0-F1C6550B29B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RihalAssignment.Api", "RihalAssignment.Api\RihalAssignment.Api.csproj", "{5ECD5635-9A98-44C2-87A0-F1C6550B29B3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

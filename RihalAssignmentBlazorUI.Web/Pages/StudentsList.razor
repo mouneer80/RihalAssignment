@@ -15,6 +15,9 @@ else
                     <tr>
                         <th>Student Id</th>
                         <th>Name</th>
+                        <th>Date of Birth</th>
+                        <th>Country</th>
+                        <th>Class</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -25,6 +28,9 @@ else
                             <tr>
                                 <td>@Student.Id</td>
                                 <td>@Student.Name</td>
+                                <td>@Student.DateOfBirth</td>
+                                <td>@Student.Countries.Name</td>
+                                <td>@Student.Classes.Name</td>
                             </tr>
                         }
                     }

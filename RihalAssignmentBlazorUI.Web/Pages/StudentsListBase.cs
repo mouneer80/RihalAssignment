@@ -13,10 +13,20 @@ namespace RihalAssignmentBlazorUI.Web.Pages
     {
         [Inject]
         public IStudentService _studentService { get; set; }
-        public IEnumerable<Student> Students { get; set; }
+        [Inject]
+        public IClassService _classService { get; set; }
+        [Inject]
+        public ICountryService _countryService { get; set; }
+        public List<Student> Students { get; set; }
+        public List<Class> Classes { get; set; }
+        public List<Country> Countries { get; set; }
         protected override async Task OnInitializedAsync()
         {
             Students = (await _studentService.GetStudents()).ToList();
+
+            Classes = (await _classService.GetClasses()).ToList();
+            Countries = (await _countryService.GetCountries()).ToList();
+
         }
     }
 }

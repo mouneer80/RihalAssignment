@@ -26,44 +26,11 @@ namespace RihalAssignment.Api.Models
         #region Overidden methods
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Country>().HasData(GetCountries());
-            modelBuilder.Entity<Class>().HasData(GetCalsses());
-            modelBuilder.Entity<Student>().HasData(GetStudents());
+            OrganizationDBInitializer organizationData = new OrganizationDBInitializer();
+            modelBuilder.Entity<Country>().HasData(organizationData.Countries);
+            modelBuilder.Entity<Class>().HasData(organizationData.Classes);
+            modelBuilder.Entity<Student>().HasData(organizationData.Students);
             base.OnModelCreating(modelBuilder);
-        }
-        #endregion
-
-
-        #region Private methods
-        private List<Country> GetCountries()
-        {
-            return new List<Country>
-            {
-                new Country { Id = 1, Name = "Oman"},
-                new Country { Id = 2, Name = "India"},
-                new Country { Id = 3, Name = "Pakistan"},
-                new Country { Id = 4, Name = "Egypt"}
-            };
-        }
-        private List<Class> GetCalsses()
-        {
-            return new List<Class>
-            {
-                new Class { Id = 1, Name = "Grade 1"},
-                new Class { Id = 2, Name = "Grade 2"},
-                new Class { Id = 3, Name = "Grade 3"},
-                new Class { Id = 4, Name = "Grade 4"}
-            };
-        }
-        private List<Student> GetStudents()
-        {
-            return new List<Student>
-            {
-                new Student { Id = 1001, Name = "test1", ClassId = 1, CountryId = 1},
-                new Student { Id = 1002, Name = "test2", ClassId = 1, CountryId = 1},
-                new Student { Id = 1003, Name = "test3", ClassId = 1, CountryId = 1},
-                new Student { Id = 1004, Name = "test4", ClassId = 1, CountryId = 1}
-            };
         }
         #endregion
     }
