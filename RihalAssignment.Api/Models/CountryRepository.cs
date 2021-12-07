@@ -32,35 +32,22 @@ namespace RihalAssignment.Api.Models
         }
         public async Task<Country> AddCountry(Country country)
         {
-            try
-            {
-                appDbContext.Countries.Add(country);
-                await appDbContext.SaveChangesAsync();
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            return country;
+            var result = await appDbContext.Countries.AddAsync(country);
+            await appDbContext.SaveChangesAsync();
+
+            return result.Entity;
         }
         public async Task<Country> UpdateCountry(Country country)
         {
-            try
+            var countryExist = appDbContext.Countries.FirstOrDefault(p => p.Id == country.Id);
+            if (countryExist != null)
             {
-                var countryExist = appDbContext.Countries.FirstOrDefault(p => p.Id == country.Id);
-                if (countryExist != null)
-                {
-                    appDbContext.Update(country);
-                    await appDbContext.SaveChangesAsync();
-                }
+                countryExist.Name = country.Name;
+                await appDbContext.SaveChangesAsync();
+                return countryExist;
             }
-            catch (Exception)
-            {
-                throw;
-            }
-            return country;
+            return null;
         }
-
         public async Task<Country> DeleteCountry(int countryId)
         {
             var result = await appDbContext.Countries
@@ -73,7 +60,6 @@ namespace RihalAssignment.Api.Models
             }
             return null;
         }
-
         public async Task<IEnumerable<Country>> Search(string name)
         {
             IQueryable<Country> query = appDbContext.Countries;

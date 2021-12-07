@@ -34,7 +34,9 @@ namespace RihalAssignmentBlazorUI.Web.Services
 
         public async void InsertStudent(Student student)
         {
-            await httpClient.GetFromJsonAsync<Student>("api/students");
+            if (student.Id == 0)
+                await httpClient.GetFromJsonAsync<Student>("api/students");
+            await httpClient.GetFromJsonAsync<Student>($"api/students/{ student.Id }");
         }
     }
 }

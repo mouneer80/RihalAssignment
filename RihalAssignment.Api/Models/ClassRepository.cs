@@ -32,34 +32,25 @@ namespace RihalAssignment.Api.Models
         }
         public async Task<Class> AddClass(Class _class)
         {
-            try
-            {
-                appDbContext.Classes.Add(_class);
-                await appDbContext.SaveChangesAsync();
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            return _class;
+            var result = await appDbContext.Classes.AddAsync(_class);
+            await appDbContext.SaveChangesAsync();
+
+            return result.Entity;
         }
 
         public async Task<Class> UpdateClass(Class _class)
         {
-            try
+            var _classExist = appDbContext.Classes
+                .FirstOrDefault(p => p.Id == _class.Id);
+            if (_classExist != null)
             {
-                var _classExist = appDbContext.Classes.FirstOrDefault(p => p.Id == _class.Id);
-                if (_classExist != null)
-                {
-                    appDbContext.Update(_class);
-                    await appDbContext.SaveChangesAsync();
-                }
+                _classExist.Name = _class.Name;
+                await appDbContext.SaveChangesAsync();
+
+                return _classExist;
             }
-            catch (Exception)
-            {
-                throw;
-            }
-            return _class;
+
+            return null;
         }
 
         public async Task<Class> DeleteClass(int classId)
@@ -72,7 +63,6 @@ namespace RihalAssignment.Api.Models
                 await appDbContext.SaveChangesAsync();
                 return result;
             }
-
             return null;
         }
 

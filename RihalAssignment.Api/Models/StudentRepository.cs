@@ -35,35 +35,37 @@ namespace RihalAssignment.Api.Models
                 .Include(e => e.Classes)
                 .FirstOrDefaultAsync(s => s.Id == studentId);
         }
-        public async Task<Student> AddStudent(Student Student)
+        public async Task<Student> AddStudent(Student student)
         {
-            try
+            if(student.Countries != null)
             {
-                appDbContext.Students.Add(Student);
-                await appDbContext.SaveChangesAsync();
+                appDbContext.Entry(student.Countries).State = EntityState.Unchanged;
             }
-            catch (Exception)
+            if (student.Classes != null)
             {
-                throw;
+                appDbContext.Entry(student.Classes).State = EntityState.Unchanged;
             }
-            return Student;
+            var result = await appDbContext.Students.AddAsync(student);
+            await appDbContext.SaveChangesAsync();
+            return result.Entity;
         }
-        public async Task<Student> UpdateStudent(Student Student)
+        public async Task<Student> UpdateStudent(Student student)
         {
-            try
+            var studentExist = appDbContext.Students
+                .FirstOrDefault(p => p.Id == student.Id);
+
+            if (studentExist != null)
             {
-                var studentExist = appDbContext.Students.FirstOrDefault(p => p.Id == Student.Id);
-                if (studentExist != null)
-                {
-                    appDbContext.Update(Student);
-                    await appDbContext.SaveChangesAsync();
-                }
+                studentExist.Name = student.Name;
+                studentExist.DateOfBirth = student.DateOfBirth;
+                studentExist.ClassId = student.ClassId;
+                studentExist.CountryId = student.CountryId;
+                
+                await appDbContext.SaveChangesAsync();
+
+                return studentExist;
             }
-            catch (Exception)
-            {
-                throw;
-            }
-            return Student;
+            return null;
         }
         public async Task<Student> DeleteStudent(int studentId)
         {
@@ -75,7 +77,6 @@ namespace RihalAssignment.Api.Models
                 await appDbContext.SaveChangesAsync();
                 return result;
             }
-
             return null;
         }
 
@@ -83,7 +84,7 @@ namespace RihalAssignment.Api.Models
         {
             IQueryable<Student> query = appDbContext.Students;
 
-            if(!string.IsNullOrEmpty(name))
+            if (!string.IsNullOrEmpty(name))
             {
                 query = query.Where(s => s.Name.Contains(name));
             }

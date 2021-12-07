@@ -67,11 +67,15 @@ namespace RihalAssignment.Api.Models
             Countries = Builder<Country>.CreateListOfSize(4)
                 .All()
                 .With(country => country.Name = Faker.Country.Name())
+                .With(student => student.CreatedDate = new DateTime(Faker.RandomNumber.Next(2020, 2021), Faker.RandomNumber.Next(1, 12), Faker.RandomNumber.Next(1, 30)))
+                .With(student => student.ModifiedDate = new DateTime(Faker.RandomNumber.Next(2020, 2021), Faker.RandomNumber.Next(1, 12), Faker.RandomNumber.Next(1, 30)))
                 .Build()
                 .ToList();
             Classes = Builder<Class>.CreateListOfSize(5)
                 .All()
                 .With(c => c.Name = "Grade " + c.Id.ToString())
+                .With(student => student.CreatedDate = new DateTime(Faker.RandomNumber.Next(2020, 2021), Faker.RandomNumber.Next(1, 12), Faker.RandomNumber.Next(1, 30)))
+                .With(student => student.ModifiedDate = new DateTime(Faker.RandomNumber.Next(2020, 2021), Faker.RandomNumber.Next(1, 12), Faker.RandomNumber.Next(1, 30)))
                 .Build()
                 .ToList();
             Students = Builder<Student>.CreateListOfSize(10)
@@ -79,6 +83,9 @@ namespace RihalAssignment.Api.Models
                 .With(student => student.Name = Faker.Name.FullName())
                 .With(student => student.ClassId = Pick<Class>.RandomItemFrom(Classes).Id)
                 .With(student => student.CountryId = Pick<Country>.RandomItemFrom(Countries).Id)
+                .With(student => student.DateOfBirth = new DateTime(Faker.RandomNumber.Next(2001, 2015), Faker.RandomNumber.Next(1, 12), Faker.RandomNumber.Next(1, 30)))
+                .With(student => student.CreatedDate = new DateTime(Faker.RandomNumber.Next(2020, 2021), Faker.RandomNumber.Next(1, 12), Faker.RandomNumber.Next(1, 30)))
+                .With(student => student.ModifiedDate = new DateTime(Faker.RandomNumber.Next(2020, 2021), Faker.RandomNumber.Next(1, 12), Faker.RandomNumber.Next(1, 30)))
                 .Build()
                 .ToList();
         }
