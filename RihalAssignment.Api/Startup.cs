@@ -32,11 +32,13 @@ namespace RihalAssignment.Api
             {
                 options.UseSqlite("Data Source = Organization.db");
             });
-
+            
             services.AddScoped<IClassRepository, ClassRepository>();
             services.AddScoped<ICountryRepository, CountryRepository>();
             services.AddScoped<IStudentRepository, StudentRepository>();
             services.AddControllers();
+
+            services.AddCors(options => options.AddDefaultPolicy(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
             //services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
         }
 
@@ -51,6 +53,8 @@ namespace RihalAssignment.Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors();
 
             app.UseAuthorization();
 

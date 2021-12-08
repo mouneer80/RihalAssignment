@@ -10,7 +10,8 @@ namespace RihalAssignmentBlazorUI.Web.Services
     {
         Task<IEnumerable<Student>> GetStudents();
         Task<Student> GetStudent(int studentId);
-        void InsertStudent(Student student);
-        void DeleteStudent(int studentId);
+        Task<Student> AddStudent(Student student);
+        Task<Student> UpdateStudent(int studentId, Student student);
+        Task DeleteStudent(int studentId);
     }
 }

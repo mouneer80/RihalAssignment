@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RihalAssignment.Api.Models;
 using RihalAssignment.Models;
@@ -9,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace RihalAssignment.Api.Controllers
 {
+    [EnableCors]
     [Route("api/[controller]")]
     [ApiController]
     public class StudentsController : ControllerBase
@@ -81,7 +84,8 @@ namespace RihalAssignment.Api.Controllers
                 }
                 var createdStudent = await studentRepository.AddStudent(student);
 
-                return CreatedAtAction(nameof(GetStudent), new { id = createdStudent.Id }, createdStudent);
+                return CreatedAtAction(nameof(GetStudent), 
+                    new { id = createdStudent.Id }, createdStudent);
             }
             catch (Exception)
             {
@@ -114,7 +118,7 @@ namespace RihalAssignment.Api.Controllers
             }
         }
         [HttpDelete("id:int")]
-        public async Task<ActionResult<Student>> DeleteStudent(int id)
+        public async Task<ActionResult> DeleteStudent(int id)
         {
             try
             {
@@ -125,8 +129,8 @@ namespace RihalAssignment.Api.Controllers
                 {
                     return NotFound($"Student with Id = {id} not found");
                 }
-
-                return await studentRepository.DeleteStudent(id);
+                studentRepository.DeleteStudent(id);
+                return Ok($"Student with Id = {id} deleted");
             }
             catch (Exception)
             {

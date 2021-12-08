@@ -11,6 +11,6 @@ namespace RihalAssignment.Api.Models
         Task<Student> GetStudent(int studentId);
         Task<Student> AddStudent(Student Student);
         Task<Student> UpdateStudent(Student Student);
-        Task<Student> DeleteStudent(int studentId);
+        Task DeleteStudent(int studentId);
     }
 }

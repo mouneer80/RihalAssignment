@@ -14,6 +14,7 @@
         </CardHeaderContent>
     </MudCardHeader>
     <MudCardContent>
+        <MudHidden @bind-Value="student.Id"></MudHidden>
         <MudTextField @bind-Value="student.Name" Label="Student Name" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
 
         <MudSelect @bind-Value="student.ClassId" Label="Classes" Variant="Variant.Outlined" OffsetY="true">
@@ -30,7 +31,7 @@
         </MudSelect>
 
         @*<MudTextField @bind-Value="student.Classes.Name" Label="Age" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
-        <MudTextField @bind-Value="student.Countries.Name" Label="Address" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>*@
+            <MudTextField @bind-Value="student.Countries.Name" Label="Address" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>*@
         <MudTextField @bind-Value="student.DateOfBirth" Label="Contact Number" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
         <br />
         <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="Save">Save Student</MudButton>
@@ -46,17 +47,21 @@
     <HeaderContent>
         <MudTh>Id</MudTh>
         <MudTh>Student Name</MudTh>
-        <MudTh>Age</MudTh>
-        <MudTh>Address</MudTh>
-        <MudTh>ContactNo</MudTh>
+        <MudTh>Birth Date</MudTh>
+        <MudTh>Class</MudTh>
+        <MudTh>Country</MudTh>
+        <MudTh>Created on</MudTh>
+        <MudTh>Modified on</MudTh>
         <MudTh>Actions</MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="Id">@context.Id</MudTd>
         <MudTd DataLabel="Student Name">@context.Name</MudTd>
-        <MudTd DataLabel="Age">@context.DateOfBirth</MudTd>
-        <MudTd DataLabel="Address">@context.Classes.Name</MudTd>
-        <MudTd DataLabel="ContactNo">@context.Countries.Name</MudTd>
+        <MudTd DataLabel="Birth Date">@context.DateOfBirth.ToShortDateString()</MudTd>
+        <MudTd DataLabel="Class">@context.Classes.Name</MudTd>
+        <MudTd DataLabel="Country">@context.Countries.Name</MudTd>
+        <MudTd DataLabel="Created on">@context.CreatedDate.ToShortDateString()</MudTd>
+        <MudTd DataLabel="Modified on">@context.ModifiedDate.ToShortDateString()</MudTd>
         <MudTd DataLabel="">
             <MudFab @onclick="@(()=>Edit(@context.Id))" Color="Color.Primary" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small" />
             <MudFab @onclick="@(()=>Delete(@context.Id))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" />
@@ -109,7 +114,10 @@
 
     private async void Save()
     {
-        _studentService.InsertStudent(student);
+        if (student.Id == 0)
+            await _studentService.AddStudent(student);
+        else
+            await _studentService.UpdateStudent(student.Id, student);
         snackBar.Add("Student record saved", Severity.Success);
         await GetAllStudents();
     }
@@ -121,7 +129,7 @@
     }
     private async void Delete(int id)
     {
-        _studentService.DeleteStudent(id);
+        await _studentService.DeleteStudent(id);
         snackBar.Add("Customer Data Deleted.", Severity.Success);
         await GetAllStudents();
     }

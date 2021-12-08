@@ -9,11 +9,10 @@ namespace RihalAssignment.Api.Models
 {
     public class AppDbContext : DbContext
     {
-        #region Contructor
+        #region Contstructor
         public AppDbContext(DbContextOptions<AppDbContext> options)
                 : base(options)
-        {
-            
+        { 
             //Database.EnsureCreated();
         }
         #endregion

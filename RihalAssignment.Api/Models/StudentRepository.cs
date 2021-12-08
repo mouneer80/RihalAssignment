@@ -37,7 +37,7 @@ namespace RihalAssignment.Api.Models
         }
         public async Task<Student> AddStudent(Student student)
         {
-            if(student.Countries != null)
+            if (student.Countries != null)
             {
                 appDbContext.Entry(student.Countries).State = EntityState.Unchanged;
             }
@@ -58,16 +58,31 @@ namespace RihalAssignment.Api.Models
             {
                 studentExist.Name = student.Name;
                 studentExist.DateOfBirth = student.DateOfBirth;
-                studentExist.ClassId = student.ClassId;
-                studentExist.CountryId = student.CountryId;
-                
+                if (student.ClassId != 0)
+                {
+                    studentExist.ClassId = student.ClassId;
+                }
+                else if(student.Classes != null)
+                {
+                    studentExist.ClassId = student.Classes.Id;
+                }
+                if (student.CountryId != 0)
+                {
+                    studentExist.CountryId = student.CountryId;
+                }
+                else if (student.Countries != null)
+                {
+                    studentExist.CountryId = student.Countries.Id;
+                }
+                studentExist.ModifiedDate = DateTime.Now;
+
                 await appDbContext.SaveChangesAsync();
 
                 return studentExist;
             }
             return null;
         }
-        public async Task<Student> DeleteStudent(int studentId)
+        public async Task DeleteStudent(int studentId)
         {
             var result = await appDbContext.Students
                 .FirstOrDefaultAsync(s => s.Id == studentId);
@@ -75,9 +90,9 @@ namespace RihalAssignment.Api.Models
             {
                 appDbContext.Students.Remove(result);
                 await appDbContext.SaveChangesAsync();
-                return result;
+                //return result;
             }
-            return null;
+            //return null;
         }
 
         public async Task<IEnumerable<Student>> Search(string name)
