@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RihalAssignment.Api.Models;
 using RihalAssignment.Models;
@@ -19,6 +20,7 @@ namespace RihalAssignment.Api.Controllers
         {
             this.countryRepository = countryRepository;
         }
+         
         [HttpGet("search")]
         public async Task<ActionResult<IEnumerable<Country>>> SearchCountries(string name)
         {
@@ -38,7 +40,7 @@ namespace RihalAssignment.Api.Controllers
                     "Error retrieving data from the database");
             }
         }
-
+         
         [HttpGet]
         public async Task<ActionResult> GetCountries()
         {
@@ -52,6 +54,7 @@ namespace RihalAssignment.Api.Controllers
                     "Error retrieving data from the database");
             }
         }
+         
         [HttpGet("{id:int}")]
         public async Task<ActionResult<Country>> GetCountry(int id)
         {
@@ -70,6 +73,7 @@ namespace RihalAssignment.Api.Controllers
                     "Error retrieving data from the database");
             }
         }
+         
         [HttpPost]
         public async Task<ActionResult<Country>> CreateCountry(Country country)
         {
@@ -89,6 +93,7 @@ namespace RihalAssignment.Api.Controllers
                     "Error retrieving data from the database");
             }
         }
+         
         [HttpPut("updatecountry/{id:int}")]
         public async Task<ActionResult<Country>> UpdateCountry(int id, Country country)
         {
@@ -113,25 +118,26 @@ namespace RihalAssignment.Api.Controllers
                     "Error updating data");
             }
         }
-        [HttpDelete("deletecountry/{id:int}")]
-        public async Task<ActionResult<Country>> DeleteCountry(int id)
-        {
-            try
-            {
-                var countryToDelete = await countryRepository.GetCountry(id);
+         
+        //[HttpDelete("deletecountry/{id:int}")]
+        //public async Task<ActionResult<Country>> DeleteCountry(int id)
+        //{
+        //    try
+        //    {
+        //        var countryToDelete = await countryRepository.GetCountry(id);
 
-                if (countryToDelete == null)
-                {
-                    return NotFound($"Country with Id = {id} not found");
-                }
+        //        if (countryToDelete == null)
+        //        {
+        //            return NotFound($"Country with Id = {id} not found");
+        //        }
 
-                return await countryRepository.DeleteCountry(id);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error deleting data");
-            }
-        }
+        //        return await countryRepository.DeleteCountry(id);
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return StatusCode(StatusCodes.Status500InternalServerError,
+        //            "Error deleting data");
+        //    }
+        //}
     }
 }

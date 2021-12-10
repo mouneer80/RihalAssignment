@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 using RihalAssignment.Api.Models;
 using System;
 using System.Collections.Generic;
@@ -37,6 +38,19 @@ namespace RihalAssignment.Api
             services.AddScoped<ICountryRepository, CountryRepository>();
             services.AddScoped<IStudentRepository, StudentRepository>();
             services.AddControllers();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                { 
+                    Version = "v1",
+                    Title = "Rihal Assignment Api By Mouneer Abdelaziz",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Mouneer Abdelaziz",
+                        Email = "mouneer.abdelaziz@gmail.com",
+                    }
+                });
+            });
 
             //services.AddCors(options => options.AddDefaultPolicy(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
             //services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
@@ -45,6 +59,12 @@ namespace RihalAssignment.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Rihal Assignment API V1");
+                c.RoutePrefix = string.Empty;
+            });
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RihalAssignment.Models", "R
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RihalAssignment.Api", "RihalAssignment.Api\RihalAssignment.Api.csproj", "{5ECD5635-9A98-44C2-87A0-F1C6550B29B3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RihalAssignment.TestProject", "RihalAssignment.TestProject\RihalAssignment.TestProject.csproj", "{53027A11-605B-4AA9-9F98-B1D104D29314}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{5ECD5635-9A98-44C2-87A0-F1C6550B29B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5ECD5635-9A98-44C2-87A0-F1C6550B29B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5ECD5635-9A98-44C2-87A0-F1C6550B29B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53027A11-605B-4AA9-9F98-B1D104D29314}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53027A11-605B-4AA9-9F98-B1D104D29314}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53027A11-605B-4AA9-9F98-B1D104D29314}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53027A11-605B-4AA9-9F98-B1D104D29314}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

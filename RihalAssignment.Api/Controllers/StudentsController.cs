@@ -22,6 +22,7 @@ namespace RihalAssignment.Api.Controllers
         {
             this.studentRepository = studentRepository;
         }
+         
         [HttpGet("search")]
         public async Task<ActionResult<IEnumerable<Student>>> SearchStudents(string name)
         {
@@ -41,7 +42,7 @@ namespace RihalAssignment.Api.Controllers
                     "Error retrieving data from the database");
             }
         }
-
+         
         [HttpGet]
         public async Task<ActionResult> GetStudents()
         {
@@ -55,6 +56,7 @@ namespace RihalAssignment.Api.Controllers
                     "Error retrieving data from the database");
             }
         }
+         
         [HttpGet("{id:int}")]
         public async Task<ActionResult<Student>> GetStudent(int id)
         {
@@ -73,6 +75,7 @@ namespace RihalAssignment.Api.Controllers
                     "Error retrieving data from the database");
             }
         }
+         
         [HttpPost]
         public async Task<ActionResult<Student>> CreateStudent(Student student)
         {
@@ -93,6 +96,7 @@ namespace RihalAssignment.Api.Controllers
                     "Error retrieving data from the database");
             }
         }
+         
         [HttpPut("updatestudent/{id:int}")]
         public async Task<ActionResult<Student>> UpdateStudent(int id, Student student)
         {
@@ -117,6 +121,7 @@ namespace RihalAssignment.Api.Controllers
                     "Error updating data");
             }
         }
+         
         [HttpDelete("deletestudent/{id:int}")]
         public async Task<ActionResult> DeleteStudent(int id)
         {

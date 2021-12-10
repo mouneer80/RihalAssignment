@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RihalAssignment.Api.Models;
 using RihalAssignment.Models;
@@ -19,6 +20,7 @@ namespace RihalAssignment.Api.Controllers
         {
             this.classRepository = classRepository;
         }
+         
         [HttpGet("search")]
         public async Task<ActionResult<IEnumerable<Class>>> SearchClasses(string name)
         {
@@ -38,7 +40,7 @@ namespace RihalAssignment.Api.Controllers
                     "Error retrieving data from the database");
             }
         }
-
+         
         [HttpGet]
         public async Task<ActionResult> GetClasses()
         {
@@ -52,6 +54,7 @@ namespace RihalAssignment.Api.Controllers
                     "Error retrieving data from the database");
             }
         }
+         
         [HttpGet("{id:int}")]
         public async Task<ActionResult<Class>> GetClass(int id)
         {
@@ -70,6 +73,7 @@ namespace RihalAssignment.Api.Controllers
                     "Error retrieving data from the database");
             }
         }
+         
         [HttpPost]
         public async Task<ActionResult<Class>> CreateClass(Class _class)
         {
@@ -89,6 +93,7 @@ namespace RihalAssignment.Api.Controllers
                     "Error retrieving data from the database");
             }
         }
+         
         [HttpPut("updateclass/{id:int}")]
         public async Task<ActionResult<Class>> UpdateClass(int id, Class _class)
         {
@@ -113,26 +118,27 @@ namespace RihalAssignment.Api.Controllers
                     "Error updating data");
             }
         }
-        [HttpDelete("deleteclass/{id:int}")]
-        public async Task<ActionResult<Class>> DeleteClass(int id)
-        {
-            try
-            {
+         
+        //[HttpDelete("deleteclass/{id:int}")]
+        //public async Task<ActionResult<Class>> DeleteClass(int id)
+        //{
+        //    try
+        //    {
 
-                var classToDelete = await classRepository.GetClass(id);
+        //        var classToDelete = await classRepository.GetClass(id);
 
-                if (classToDelete == null)
-                {
-                    return NotFound($"Class with Id = {id} not found");
-                }
+        //        if (classToDelete == null)
+        //        {
+        //            return NotFound($"Class with Id = {id} not found");
+        //        }
 
-                return await classRepository.DeleteClass(id);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error deleting data");
-            }
-        }
+        //        return await classRepository.DeleteClass(id);
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return StatusCode(StatusCodes.Status500InternalServerError,
+        //            "Error deleting data");
+        //    }
+        //}
     }
 }
