@@ -8,7 +8,9 @@
     </div>
 
     <div class="main">
-        <MudButton OnClick="@((e) => DarkMode())">Toggle Dark/Light Mode</MudButton>
+        <MudTooltip Text="Toggle Dark/Light Mode">
+            <MudButton OnClick="@((e) => DarkMode())"><MudIcon Icon="@iconChange" Title="@iconTitle" /></MudButton>
+        </MudTooltip>
         <div class="content px-4">
             @Body
         </div>
@@ -18,7 +20,8 @@
 <MudSnackbarProvider />
 
 @code{
-
+    string iconChange = @Icons.Material.Filled.DarkMode;
+    string iconTitle = "Toggle Dark Mode";
     protected override void OnInitialized()
     {
         currentTheme = defaultTheme;
@@ -29,10 +32,14 @@
         if (currentTheme == defaultTheme)
         {
             currentTheme = darkTheme;
+            iconChange = @Icons.Material.Filled.LightMode;
+            iconTitle = "Toggle Light Mode";
         }
         else
         {
             currentTheme = defaultTheme;
+            iconChange = @Icons.Material.Filled.DarkMode;
+            iconTitle = "Toggle Dark Mode";
         }
     }
 
