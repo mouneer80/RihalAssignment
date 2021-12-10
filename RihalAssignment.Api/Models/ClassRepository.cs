@@ -32,6 +32,8 @@ namespace RihalAssignment.Api.Models
         }
         public async Task<Class> AddClass(Class _class)
         {
+            _class.ModifiedDate = DateTime.Now;
+            _class.CreatedDate = DateTime.Now;
             var result = await appDbContext.Classes.AddAsync(_class);
             await appDbContext.SaveChangesAsync();
 

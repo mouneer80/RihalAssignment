@@ -45,6 +45,8 @@ namespace RihalAssignment.Api.Models
             {
                 appDbContext.Entry(student.Classes).State = EntityState.Unchanged;
             }
+            student.ModifiedDate = DateTime.Now;
+            student.CreatedDate = DateTime.Now;
             var result = await appDbContext.Students.AddAsync(student);
             await appDbContext.SaveChangesAsync();
             return result.Entity;

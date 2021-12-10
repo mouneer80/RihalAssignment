@@ -32,6 +32,8 @@ namespace RihalAssignment.Api.Models
         }
         public async Task<Country> AddCountry(Country country)
         {
+            country.ModifiedDate = DateTime.Now;
+            country.CreatedDate = DateTime.Now;
             var result = await appDbContext.Countries.AddAsync(country);
             await appDbContext.SaveChangesAsync();
 
