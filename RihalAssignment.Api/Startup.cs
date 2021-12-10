@@ -38,7 +38,7 @@ namespace RihalAssignment.Api
             services.AddScoped<IStudentRepository, StudentRepository>();
             services.AddControllers();
 
-            services.AddCors(options => options.AddDefaultPolicy(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
+            //services.AddCors(options => options.AddDefaultPolicy(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
             //services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
         }
 
@@ -48,13 +48,14 @@ namespace RihalAssignment.Api
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                
             }
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
-            app.UseCors();
+            //app.UseCors();
 
             app.UseAuthorization();
 

@@ -14,27 +14,27 @@
         </CardHeaderContent>
     </MudCardHeader>
     <MudCardContent>
-        <MudHidden @bind-Value="student.Id"></MudHidden>
-        <MudTextField @bind-Value="student.Name" Label="Student Name" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+        <MudHidden @bind-Value="studentId"></MudHidden>
+        <MudTextField @bind-Value="studentName" Label="Student Name" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
 
-        <MudSelect @bind-Value="student.ClassId" Label="Classes" Variant="Variant.Outlined" OffsetY="true">
+        <MudSelect @bind-Value="studentClassId" Label="Classes" Variant="Variant.Outlined" OffsetY="true">
+            <MudSelectItem Value="0">Select Class</MudSelectItem>
             @foreach (var _class in classes)
             {
                 <MudSelectItem Value="_class.Id">@_class.Name</MudSelectItem>
             }
         </MudSelect>
-        <MudSelect @bind-Value="student.CountryId" Label="Countries" Variant="Variant.Outlined" OffsetY="true">
+        <MudSelect @bind-Value="studentCountryId" Label="Countries" Variant="Variant.Outlined" OffsetY="true">
+            <MudSelectItem Value="0">Select Country</MudSelectItem>
             @foreach (var _country in countries)
             {
                 <MudSelectItem Value="_country.Id">@_country.Name</MudSelectItem>
             }
         </MudSelect>
-
-        @*<MudTextField @bind-Value="student.Classes.Name" Label="Age" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
-            <MudTextField @bind-Value="student.Countries.Name" Label="Address" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>*@
-        <MudTextField @bind-Value="student.DateOfBirth" Label="Contact Number" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+        <MudDatePicker @bind-Date="studentDateOfBirth" Label="Student Birthdate" PickerVariant="PickerVariant.Inline" Color="Color.Success" Rounded="true"></MudDatePicker>
         <br />
         <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="Save">Save Student</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="Clear">Rest all fields</MudButton>
     </MudCardContent>
 </MudCard>
 <br />
@@ -81,7 +81,11 @@
     private string countryId;
     private List<Class> classes = new();
     private List<Country> countries = new();
-
+    int studentId = 0;
+    string studentName = "";
+    int studentClassId = 0;
+    int studentCountryId = 0;
+    DateTime? studentDateOfBirth = DateTime.Now;
 
     protected override async Task OnInitializedAsync()
     {
@@ -111,26 +115,43 @@
         }
         return false;
     }
-
+    private void Clear()
+    {
+        studentId = 0;
+        studentName = "";
+        studentClassId = 0;
+        studentCountryId = 0;
+        studentDateOfBirth = DateTime.Now;
+    }
     private async void Save()
     {
         if (student.Id == 0)
             await _studentService.AddStudent(student);
         else
             await _studentService.UpdateStudent(student.Id, student);
-        snackBar.Add("Student record saved", Severity.Success);
+
         await GetAllStudents();
+        this.StateHasChanged();
+        snackBar.Add("Student record saved", Severity.Success);
     }
     private void Edit(int id)
     {
         student = students.FirstOrDefault(c => c.Id == id);
         classId = student.ClassId.ToString();
         countryId = student.CountryId.ToString();
+        studentId = student.Id;
+        studentName = student.Name;
+        studentClassId = student.ClassId;
+        studentCountryId = student.CountryId;
+        studentDateOfBirth = student.DateOfBirth;
     }
     private async void Delete(int id)
     {
         await _studentService.DeleteStudent(id);
-        snackBar.Add("Customer Data Deleted.", Severity.Success);
+        //students = (await _studentService.GetStudents()).ToList();
         await GetAllStudents();
+        this.StateHasChanged();
+        //await OnInitializedAsync();
+        snackBar.Add("Student Data Deleted.", Severity.Success);
     }
 }

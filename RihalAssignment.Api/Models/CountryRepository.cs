@@ -43,6 +43,7 @@ namespace RihalAssignment.Api.Models
             if (countryExist != null)
             {
                 countryExist.Name = country.Name;
+                country.ModifiedDate = DateTime.Now;
                 await appDbContext.SaveChangesAsync();
                 return countryExist;
             }

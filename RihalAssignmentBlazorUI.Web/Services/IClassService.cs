@@ -10,5 +10,7 @@ namespace RihalAssignmentBlazorUI.Web.Services
     {
         Task<IEnumerable<Class>> GetClasses();
         Task<Class> GetClass(int classId);
+        Task<Class> AddClass(Class _class);
+        Task<Class> UpdateClass(int classId, Class _class);
     }
 }

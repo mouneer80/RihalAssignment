@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace RihalAssignment.Api.Controllers
 {
-    [EnableCors]
+    
     [Route("api/[controller]")]
     [ApiController]
     public class StudentsController : ControllerBase
@@ -93,7 +93,7 @@ namespace RihalAssignment.Api.Controllers
                     "Error retrieving data from the database");
             }
         }
-        [HttpPut("id:int")]
+        [HttpPut("updatestudent/{id:int}")]
         public async Task<ActionResult<Student>> UpdateStudent(int id, Student student)
         {
             try
@@ -117,19 +117,18 @@ namespace RihalAssignment.Api.Controllers
                     "Error updating data");
             }
         }
-        [HttpDelete("id:int")]
+        [HttpDelete("deletestudent/{id:int}")]
         public async Task<ActionResult> DeleteStudent(int id)
         {
             try
             {
-
                 var studentToDelete = await studentRepository.GetStudent(id);
 
                 if (studentToDelete == null)
                 {
                     return NotFound($"Student with Id = {id} not found");
                 }
-                studentRepository.DeleteStudent(id);
+                await studentRepository.DeleteStudent(id);
                 return Ok($"Student with Id = {id} deleted");
             }
             catch (Exception)

@@ -1,0 +1,101 @@
+﻿@page "/countriesList"
+
+@using RihalAssignment.Models
+
+@inject RihalAssignmentBlazorUI.Web.Services.ICountryService _countryService
+@inject MudBlazor.ISnackbar snackBar
+
+
+<MudCard Elevation="25">
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudText Typo="Typo.h6">Add / Edit Countries</MudText>
+        </CardHeaderContent>
+    </MudCardHeader>
+    <MudCardContent>
+        <MudHidden @bind-Value="countryId"></MudHidden>
+        <MudTextField @bind-Value="countryName" Label="Country Name" Variant="Variant.Text" Margin="Margin.Normal"></MudTextField>
+        <br />
+        <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="Save">Save Country</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="Clear">Rest all fields</MudButton>
+    </MudCardContent>
+</MudCard>
+<br />
+<MudTable Elevation="25" Items="countries" Filter="new Func<Country, bool>(Search)" @bind-customer="country">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Countries</MudText>
+        <MudToolBarSpacer />
+        <MudTextField @bind-Value="searchString" Placeholder="Search for Countries..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>Id</MudTh>
+        <MudTh>Country Name</MudTh>
+        <MudTh>Created on</MudTh>
+        <MudTh>Modified on</MudTh>
+        <MudTh>Actions</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Id">@context.Id</MudTd>
+        <MudTd DataLabel="Country Name">@context.Name</MudTd>
+        <MudTd DataLabel="Created on">@context.CreatedDate.ToShortDateString()</MudTd>
+        <MudTd DataLabel="Modified on">@context.ModifiedDate.ToShortDateString()</MudTd>
+        <MudTd DataLabel="">
+            <MudFab @onclick="@(()=>Edit(@context.Id))" Color="Color.Primary" Icon="@Icons.Material.Filled.Edit" Size="Size.Small" IconSize="Size.Small" />
+        </MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager PageSizeOptions="new int[] { 5,10,20,50}" />
+    </PagerContent>
+</MudTable>
+
+@code{
+    private string searchString = "";
+
+    private Country country = new();
+    private List<Country> countries = new();
+
+    int countryId = 0;
+    string countryName = "";
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetAllCountries();
+    }
+
+    private async Task<List<Country>> GetAllCountries()
+    {
+        return countries = (await _countryService.GetCountries()).ToList();
+    }
+    private bool Search(Country country)
+    {
+        if (country.Name is not null && country.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private async void Save()
+    {
+        if (country.Id == 0)
+            await _countryService.AddCountry(country);
+        else
+            await _countryService.UpdateCountry(country.Id, country);
+
+        await GetAllCountries();
+        this.StateHasChanged();
+        snackBar.Add("Country record saved", Severity.Success);
+    }
+    private void Edit(int id)
+    {
+        country = countries.FirstOrDefault(c => c.Id == id);
+        countryId = country.Id;
+        countryName = country.Name;
+    }
+    private void Clear()
+    {
+        countryId = 0;
+        countryName = "";
+    }
+}

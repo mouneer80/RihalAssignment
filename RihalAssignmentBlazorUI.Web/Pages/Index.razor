@@ -1,0 +1,125 @@
+﻿@page "/"
+
+@using RihalAssignment.Models
+@inject RihalAssignmentBlazorUI.Web.Services.IStudentService _studentService
+@inject RihalAssignmentBlazorUI.Web.Services.IClassService _classService
+@inject RihalAssignmentBlazorUI.Web.Services.ICountryService _countryService
+
+<h3>Home</h3>
+
+<MudAlert Severity="Severity.Success" Variant="Variant.Filled">The average age of students is : @studentsAverageAges</MudAlert>
+
+<MudPaper Class="pa-4">
+    <MudChart ChartType="ChartType.Pie" InputData="@dataClasses" @bind-SelectedIndex="first" InputLabels="@labelsClasses" Width="300px" Height="300px" />
+</MudPaper>
+
+<MudPaper Class="pa-4">
+    <MudChart ChartType="ChartType.Pie" InputData="@dataCountries" @bind-SelectedIndex="first" InputLabels="@labelsCountries" Width="300px" Height="300px" />
+</MudPaper>
+
+@code {
+
+    private List<Student> students = new List<Student>();
+    private List<Class> classes = new List<Class>();
+    private static List<Country> countries = new List<Country>();
+
+    private int first = -1; //default value cannot be 0 -> first selectedindex is 0.
+
+    int dataSize = 0;
+    double[] dataClasses;
+    double[] dataCountries;
+    string[] labelsClasses;
+    string[] labelsCountries;
+    int[] studentsAges;
+    int studentsAverageAges = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetAllClasses();
+        await GetAllCountries();
+        await GetAllStudents();
+        PieChartClasses();
+        PieChartCountries();
+        CalculateStudentsAges();
+        studentsAverageAges = GetAvarageAge();
+    }
+
+    private int[] CalculateStudentsAges()
+    {
+        studentsAges = new int[students.Count()];
+        for (var i = 0; i <= students.Count() - 1; i++)
+        {
+            int age = DateTime.Now.Year - students[i].DateOfBirth.Year;
+            studentsAges[i] = age;
+        }
+        return studentsAges;
+    }
+
+    private int GetAvarageAge()
+    {
+        int avg = Convert.ToInt32(Queryable.Average(studentsAges.AsQueryable()));
+
+        return avg;
+    }
+    private void PieChartCountries()
+    {
+        dataCountries = new double[countries.Count()];
+        labelsCountries = new string[countries.Count()];
+        for (var i = 0; i <= countries.Count() - 1; i++)
+        {
+            dataCountries[i] = students.Where(s => s.CountryId == countries[i].Id).Count();
+            labelsCountries[i] = countries[i].Name + " " + dataCountries[i].ToString() + " students";
+        }
+    }
+    private void PieChartClasses()
+    {
+        dataClasses = new double[classes.Count()];
+        labelsClasses = new string[classes.Count()];
+        for (var i = 0; i <= classes.Count() - 1; i++)
+        {
+            dataClasses[i] = students.Where(s => s.ClassId == classes[i].Id).Count();
+            labelsClasses[i] = classes[i].Name + " " + dataClasses[i].ToString() + " students";
+        }
+    }
+
+    private async Task<List<Student>> GetAllStudents()
+    {
+        return students = (await _studentService.GetStudents()).ToList();
+    }
+    private async Task<List<Class>> GetAllClasses()
+    {
+        return classes = (await _classService.GetClasses()).ToList();
+    }
+    private async Task<List<Country>> GetAllCountries()
+    {
+        return countries = (await _countryService.GetCountries()).ToList();
+    }
+
+    //Random random = new Random();
+
+    //void RandomizeData()
+    //{
+    //    var new_data = new double[dataSize];
+    //    for (int i = 0; i < new_data.Length; i++)
+    //        new_data[i] = random.NextDouble() * 100;
+    //    data = new_data;
+    //    StateHasChanged();
+    //}
+
+    //void AddDataSize()
+    //{
+    //    if (dataSize < 20)
+    //    {
+    //        dataSize = dataSize + 1;
+    //        RandomizeData();
+    //    }
+    //}
+    //void RemoveDataSize()
+    //{
+    //    if (dataSize > 0)
+    //    {
+    //        dataSize = dataSize - 1;
+    //        RandomizeData();
+    //    }
+    //}
+}

@@ -10,5 +10,7 @@ namespace RihalAssignmentBlazorUI.Web.Services
     {
         Task<IEnumerable<Country>> GetCountries();
         Task<Country> GetCountry(int countryId);
+        Task<Country> AddCountry(Country _country);
+        Task<Country> UpdateCountry(int countryId, Country _country);
     }
 }

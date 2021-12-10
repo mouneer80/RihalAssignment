@@ -17,6 +17,13 @@ namespace RihalAssignmentBlazorUI.Web.Services
         {
             this.httpClient = httpClient;
         }
+
+        public async Task<Country> AddCountry(Country _country)
+        {
+            var response = await httpClient.PostAsJsonAsync<Country>("api/countries", _country);
+            return await response.Content.ReadFromJsonAsync<Country>();
+        }
+
         public async Task<IEnumerable<Country>> GetCountries()
         {
             return await httpClient.GetFromJsonAsync<Country[]>("api/countries");
@@ -25,6 +32,12 @@ namespace RihalAssignmentBlazorUI.Web.Services
         public async Task<Country> GetCountry(int countryId)
         {
             return await httpClient.GetFromJsonAsync<Country>($"api/countries/{countryId}");
+        }
+
+        public async Task<Country> UpdateCountry(int countryId, Country _country)
+        {
+            var response = await httpClient.PutAsJsonAsync<Country>($"api/countries/updatecountry/{countryId}", _country);
+            return await response.Content.ReadFromJsonAsync<Country>();
         }
     }
 }

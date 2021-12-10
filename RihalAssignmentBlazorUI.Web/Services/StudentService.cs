@@ -19,7 +19,7 @@ namespace RihalAssignmentBlazorUI.Web.Services
 
         public async Task DeleteStudent(int studentId)
         {
-            await httpClient.DeleteAsync($"api/students/{studentId}");
+            await httpClient.DeleteAsync($"api/students/deletestudent/{studentId}");
         }
 
         public async Task<Student> GetStudent(int studentId)
@@ -40,7 +40,7 @@ namespace RihalAssignmentBlazorUI.Web.Services
 
         public async Task<Student> UpdateStudent(int studentId, Student student)
         {
-            var response = await httpClient.PutAsJsonAsync<Student>($"api/students/{studentId}", student);
+            var response = await httpClient.PutAsJsonAsync<Student>($"api/students/updatestudent/{studentId}", student);
             return await response.Content.ReadFromJsonAsync<Student>();
         }
     }

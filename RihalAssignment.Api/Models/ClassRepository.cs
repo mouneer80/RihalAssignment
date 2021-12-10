@@ -45,6 +45,7 @@ namespace RihalAssignment.Api.Models
             if (_classExist != null)
             {
                 _classExist.Name = _class.Name;
+                _classExist.ModifiedDate = DateTime.Now;
                 await appDbContext.SaveChangesAsync();
 
                 return _classExist;

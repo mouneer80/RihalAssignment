@@ -89,7 +89,7 @@ namespace RihalAssignment.Api.Controllers
                     "Error retrieving data from the database");
             }
         }
-        [HttpPut("id:int")]
+        [HttpPut("updateclass/{id:int}")]
         public async Task<ActionResult<Class>> UpdateClass(int id, Class _class)
         {
             try
@@ -113,7 +113,7 @@ namespace RihalAssignment.Api.Controllers
                     "Error updating data");
             }
         }
-        [HttpDelete("id:int")]
+        [HttpDelete("deleteclass/{id:int}")]
         public async Task<ActionResult<Class>> DeleteClass(int id)
         {
             try

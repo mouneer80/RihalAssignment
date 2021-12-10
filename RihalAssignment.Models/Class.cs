@@ -19,7 +19,7 @@ namespace RihalAssignment.Models
         [Column("modified_date")]
         public DateTime ModifiedDate { get; set; }
         // Navigation properties
-        [JsonIgnore]
-        public List<Student> Students { get; set; }
+        //[JsonIgnore]
+        //public List<Student> Students { get; set; }
     }
 }
