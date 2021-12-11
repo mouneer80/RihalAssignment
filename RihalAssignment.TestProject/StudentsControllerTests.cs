@@ -24,28 +24,28 @@ namespace RihalAssignment.TestProject
         }
 
         [Fact]
-        public void Get_WhenCalled_ReturnsOkResult()
+        public async void Get_WhenCalled_ReturnsOkResult()
         {
             // Act
             var okResult = _controller.GetStudents();
 
             // Assert
-            Assert.IsType<OkObjectResult>(okResult as OkObjectResult);
+            Assert.IsType<OkObjectResult>(await okResult as OkObjectResult);
         }
 
         [Fact]
-        public void Get_WhenCalled_ReturnsAllStudents()
+        public async void Get_WhenCalled_ReturnsAllStudents()
         {
             // Act
-            var okResult = _controller.Get() as OkObjectResult;
+            var okResult = await _controller.GetStudents() as OkObjectResult;
 
             // Assert
-            var items = Assert.IsType<List<ShoppingItem>>(okResult.Value);
+            var items = Assert.IsType<List<Student>>(okResult.Value);
             Assert.Equal(3, items.Count);
         }
 
         [Fact]
-        public void GetById_UnknownGuidPassed_ReturnsNotFoundResult()
+        public void GetById_UnknownIdPassed_ReturnsNotFoundResult()
         {
             // Act
             var notFoundResult = _controller.GetStudent(1);
@@ -55,45 +55,45 @@ namespace RihalAssignment.TestProject
         }
 
         [Fact]
-        public void GetById_ExistingGuidPassed_ReturnsOkResult()
+        public async void GetById_ExistingIdPassed_ReturnsOkResult()
         {
             // Arrange
-            var testGuid = 5;
+            var testId = 5;
 
             // Act
-            var okResult = _controller.GetStudent(testGuid);
+            var okResult = await _controller.GetStudent(testId);
 
             // Assert
-            Assert.IsType<OkObjectResult>(okResult as OkObjectResult);
+            Assert.IsType<OkObjectResult>(okResult.Result as OkObjectResult);
         }
 
         [Fact]
-        public void GetById_ExistingGuidPassed_ReturnsRightItem()
+        public async void GetById_ExistingIdPassed_ReturnsRightItem()
         {
             // Arrange
-            var testGuid = new Guid("ab2bd817-98cd-4cf3-a80a-53ea0cd9c200");
+            var testId = 2;
 
             // Act
-            var okResult = _controller.Get(testGuid) as OkObjectResult;
-
+            var student = await _controller.GetStudent(testId);
+            
             // Assert
-            Assert.IsType<ShoppingItem>(okResult.Value);
-            Assert.Equal(testGuid, (okResult.Value as ShoppingItem).Id);
+            Assert.IsType<Student>(student.Value);
+            Assert.Equal(testId, (student.Value as Student).Id);
         }
 
         [Fact]
         public void Add_InvalidObjectPassed_ReturnsBadRequest()
         {
             // Arrange
-            var nameMissingItem = new ShoppingItem()
+            var nameMissingItem = new Student()
             {
-                Manufacturer = "Guinness",
-                Price = 12.00M
+                Name = "Gu",
+                DateOfBirth = DateTime.Now
             };
             _controller.ModelState.AddModelError("Name", "Required");
 
             // Act
-            var badResponse = _controller.Post(nameMissingItem);
+            var badResponse = _controller.CreateStudent(nameMissingItem);
 
             // Assert
             Assert.IsType<BadRequestObjectResult>(badResponse);
@@ -103,15 +103,16 @@ namespace RihalAssignment.TestProject
         public void Add_ValidObjectPassed_ReturnsCreatedResponse()
         {
             // Arrange
-            ShoppingItem testItem = new ShoppingItem()
+            Student testItem = new Student()
             {
-                Name = "Guinness Original 6 Pack",
-                Manufacturer = "Guinness",
-                Price = 12.00M
+                Name = "Guinness",
+                DateOfBirth = new DateTime(2014,1,2),
+                ClassId = 2,
+                CountryId = 1
             };
 
             // Act
-            var createdResponse = _controller.Post(testItem);
+            var createdResponse = _controller.CreateStudent(testItem);
 
             // Assert
             Assert.IsType<CreatedAtActionResult>(createdResponse);
@@ -121,59 +122,60 @@ namespace RihalAssignment.TestProject
         public void Add_ValidObjectPassed_ReturnedResponseHasCreatedItem()
         {
             // Arrange
-            var testItem = new ShoppingItem()
+            var testItem = new Student()
             {
-                Name = "Guinness Original 6 Pack",
-                Manufacturer = "Guinness",
-                Price = 12.00M
+                Name = "Guinness",
+                DateOfBirth = new DateTime(2014, 1, 2),
+                ClassId = 2,
+                CountryId = 1
             };
 
             // Act
-            var createdResponse = _controller.Post(testItem) as CreatedAtActionResult;
-            var item = createdResponse.Value as ShoppingItem;
+            var createdResponse = _controller.CreateStudent(testItem); 
+            var item = createdResponse.Result;
 
             // Assert
-            Assert.IsType<ShoppingItem>(item);
-            Assert.Equal("Guinness Original 6 Pack", item.Name);
+            Assert.IsType<Student>(item);
+            Assert.Equal("Guinness", item.Value.Name);
         }
 
         [Fact]
-        public void Remove_NotExistingGuidPassed_ReturnsNotFoundResponse()
+        public void Remove_NotExistingIdPassed_ReturnsNotFoundResponse()
         {
             // Arrange
-            var notExistingGuid = Guid.NewGuid();
+            var notExistingId = 6;
 
             // Act
-            var badResponse = _controller.Remove(notExistingGuid);
+            var badResponse = _controller.DeleteStudent(notExistingId);
 
             // Assert
             Assert.IsType<NotFoundResult>(badResponse);
         }
 
         [Fact]
-        public void Remove_ExistingGuidPassed_ReturnsNoContentResult()
+        public void Remove_ExistingIdPassed_ReturnsNoContentResult()
         {
             // Arrange
-            var existingGuid = new Guid("ab2bd817-98cd-4cf3-a80a-53ea0cd9c200");
+            var existingId = 6;
 
             // Act
-            var noContentResponse = _controller.Remove(existingGuid);
+            var noContentResponse = _controller.DeleteStudent(existingId);
 
             // Assert
             Assert.IsType<NoContentResult>(noContentResponse);
         }
 
         [Fact]
-        public void Remove_ExistingGuidPassed_RemovesOneItem()
+        public void Remove_ExistingIdPassed_RemovesOneItem()
         {
             // Arrange
-            var existingGuid = new Guid("ab2bd817-98cd-4cf3-a80a-53ea0cd9c200");
+            var existingId = 1;
 
             // Act
-            var okResponse = _controller.Remove(existingGuid);
+            var okResponse = _controller.DeleteStudent(existingId);
 
             // Assert
-            Assert.Equal(2, _service.GetAllStudents().Count());
+            Assert.Equal(2, _service.GetStudents().Result.Count());
         }
     }
 }
