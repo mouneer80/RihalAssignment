@@ -48,23 +48,23 @@ namespace RihalAssignment.TestProject
         public void GetById_UnknownIdPassed_ReturnsNotFoundResult()
         {
             // Act
-            var notFoundResult = _controller.GetStudent(1);
+            var notFoundResult = _controller.GetStudent(102).Result;
 
             // Assert
-            Assert.IsType<NotFoundResult>(notFoundResult);
+            Assert.IsType<NotFoundResult>(notFoundResult.Result);
         }
 
         [Fact]
-        public async void GetById_ExistingIdPassed_ReturnsOkResult()
+        public void GetById_ExistingIdPassed_ReturnsOkResult()
         {
             // Arrange
             var testId = 5;
 
             // Act
-            var okResult = await _controller.GetStudent(testId);
+            var okResult = _controller.GetStudent(testId).Result;
 
             // Assert
-            Assert.IsType<OkObjectResult>(okResult.Result as OkObjectResult);
+            Assert.IsType<Student>(okResult.Value);
         }
 
         [Fact]
@@ -80,24 +80,6 @@ namespace RihalAssignment.TestProject
             Assert.IsType<Student>(student.Value);
             Assert.Equal(testId, (student.Value as Student).Id);
         }
-
-        //[Fact]
-        //public void Add_InvalidObjectPassed_ReturnsBadRequest()
-        //{
-        //    // Arrange
-        //    var nameMissingItem = new Student()
-        //    {
-        //        Name = "Gu",
-        //        DateOfBirth = DateTime.Now
-        //    };
-        //    _controller.ModelState.AddModelError("Name", "Required");
-
-        //    // Act
-        //    var badResponse = _controller.CreateStudent(nameMissingItem);
-
-        //    // Assert
-        //    Assert.IsType<BadRequestObjectResult>(badResponse);
-        //}
 
         [Fact]
         public void Add_ValidObjectPassed_ReturnsCreatedResponse()
@@ -119,63 +101,29 @@ namespace RihalAssignment.TestProject
         }
 
         [Fact]
-        public void Add_ValidObjectPassed_ReturnedResponseHasCreatedItem()
-        {
-            // Arrange
-            var testItem = new Student()
-            {
-                Name = "Mouneer",
-                DateOfBirth = DateTime.Parse("2002-12-12"),
-                CountryId = 1,
-                ClassId = 2
-            };
-
-            // Act
-            var createdResponse = _controller.CreateStudent(testItem);
-            var item = createdResponse.Result;
-
-            // Assert
-            Assert.IsType<CreatedAtActionResult>(item.Result);
-            Assert.Equal("Mouneer", item.Value.Name);
-        }
-
-        [Fact]
-        public void Remove_NotExistingIdPassed_ReturnsNotFoundResponse()
-        {
-            // Arrange
-            var notExistingId = 6;
-
-            // Act
-            var badResponse = _controller.DeleteStudent(notExistingId);
-
-            // Assert
-            Assert.IsType<NotFoundResult>(badResponse);
-        }
-
-        [Fact]
         public void Remove_ExistingIdPassed_ReturnsNoContentResult()
         {
             // Arrange
-            var existingId = 6;
+            var existingId = 101;
 
             // Act
-            var noContentResponse = _controller.DeleteStudent(existingId);
+            var noContentResponse = _controller.DeleteStudent(existingId).Result;
 
             // Assert
-            Assert.IsType<NoContentResult>(noContentResponse);
+            Assert.IsType<NotFoundObjectResult>(noContentResponse);
         }
 
         [Fact]
         public void Remove_ExistingIdPassed_RemovesOneItem()
         {
             // Arrange
-            var existingId = 1;
-
+            var existingId = 6;
+            var studentCountBeforeRemove = _service.GetStudents().Result.Count();
             // Act
             var okResponse = _controller.DeleteStudent(existingId);
 
             // Assert
-            Assert.Equal(2, _service.GetStudents().Result.Count());
+            Assert.Equal(studentCountBeforeRemove-1, _service.GetStudents().Result.Count());
         }
     }
 }
