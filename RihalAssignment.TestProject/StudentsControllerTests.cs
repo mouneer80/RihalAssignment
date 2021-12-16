@@ -58,7 +58,7 @@ namespace RihalAssignment.TestProject
         public void GetById_ExistingIdPassed_ReturnsOkResult()
         {
             // Arrange
-            var testId = 5;
+            var testId = 105;
 
             // Act
             var okResult = _controller.GetStudent(testId).Result;
