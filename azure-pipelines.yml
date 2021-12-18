@@ -48,13 +48,6 @@ steps:
     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
     zipAfterPublish: true
 
-- task: PublishBuildArtifacts@1
-  displayName: 'publish api artifacts'
-  inputs:
-    targetPath: '$(Build.ArtifactStagingDirectory)'
-    artifact: 'WebAPI'
-    publishLocation: 'pipeline'
-
 - task: DotNetCoreCLI@2
   displayName: 'dotnet publish --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
   inputs:
@@ -65,8 +58,4 @@ steps:
     zipAfterPublish: true
 
 - task: PublishBuildArtifacts@1
-  displayName: 'publish blazorUI artifacts'
-  inputs:
-    targetPath: '$(Build.ArtifactStagingDirectory)'
-    artifact: 'BlazorServerSideApp'
-    publishLocation: 'pipeline'
+
