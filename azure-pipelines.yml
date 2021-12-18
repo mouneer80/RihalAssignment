@@ -49,7 +49,7 @@ steps:
     zipAfterPublish: true
 
 - task: PublishBuildArtifacts@1
-  displayName: 'publish artifacts'
+  displayName: 'publish api artifacts'
   inputs:
     targetPath: '$(Build.ArtifactStagingDirectory)'
     artifact: 'WebAPI'
@@ -65,7 +65,7 @@ steps:
     zipAfterPublish: true
 
 - task: PublishBuildArtifacts@1
-  displayName: 'publish artifacts'
+  displayName: 'publish blazorUI artifacts'
   inputs:
     targetPath: '$(Build.ArtifactStagingDirectory)'
     artifact: 'BlazorServerSideApp'
