@@ -38,3 +38,41 @@ steps:
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+
+- job: WebAPI
+  displayName: 'Publish WebAPI'
+  steps:
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet publish --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+      inputs:
+        command: publish
+        publishWebProjects: false
+        projects: 'RihalAssignment.Api/RihalAssignment.Api.csproj'
+        arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+        zipAfterPublish: true
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'publish artifacts'
+      inputs:
+        targetPath: '$(Build.ArtifactStagingDirectory)'
+        artifact: 'WebAPI'
+        publishLocation: 'pipeline'
+
+- job: BlazorServerSideApp
+  displayName: 'Publish BlazorServerSideApp'
+  steps:
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet publish --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+      inputs:
+        command: publish
+        publishWebProjects: false
+        projects: 'RihalAssignmentBlazorUI.Web/RihalAssignmentBlazorUI.Web.csproj'
+        arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+        zipAfterPublish: true
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'publish artifacts'
+      inputs:
+        targetPath: '$(Build.ArtifactStagingDirectory)'
+        artifact: 'BlazorServerSideApp'
+        publishLocation: 'pipeline'
