@@ -64,8 +64,8 @@ steps:
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifacts'
-    inputs:
-      targetPath: '$(Build.ArtifactStagingDirectory)'
-      artifact: 'WebApi'
-      publishLocation: 'pipeline'
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)'
+    artifact: 'WebApi'
+    publishLocation: 'pipeline'
 
