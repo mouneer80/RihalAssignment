@@ -39,13 +39,13 @@ steps:
 
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
-  
+
 - task: DotNetCoreCLI@2
-    displayName: 'Build WebApi'
-    inputs:
-      command: 'build'
-      projects: '**/RihalAssignment.Api/RihalAssignment.Api.csproj'
-      arguments: '--configuration $(buildConfiguration)'
+  displayName: 'Build WebApi'
+  inputs:
+    command: 'build'
+    projects: '**/RihalAssignment.Api/RihalAssignment.Api.csproj'
+    arguments: '--configuration $(buildConfiguration)'
       
 - task: VSTest@2
   inputs:
